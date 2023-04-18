@@ -17,11 +17,14 @@ public class Main {
               basket = new Basket(products, prices);
           }
 
+          ClientLog log = new ClientLog();
+
         while (true) {
             showPrice();
             System.out.println("Выберете товар и количество через пробел или введите 'end'");
             String input = scanner.nextLine();
             if ("end".equals(input)) {
+                log.exportAsCSV(new File ("log.csv"));
                 break;
             }
 
@@ -29,6 +32,7 @@ public class Main {
             int productNumber = Integer.parseInt(parts[0]) - 1;
             int productCount = Integer.parseInt(parts[1]);
             basket.addToCart(productNumber, productCount);
+            log.log(productNumber, productCount);
             basket.saveTxt(saveFile);
         }
 
