@@ -6,13 +6,13 @@ public class Main {
     static String[] products = {"Хлеб", "Яблоки", "Молоко"};
     static int[] prices = {100, 200, 300};
 
-    static File saveFile = new File ("basket.txt");
+    static File saveFile = new File ("basket.json");
 
     public static void main(String[] args) throws FileNotFoundException {
 
           Basket basket = null;
           if (saveFile.exists()) {
-              basket = Basket.loadFromTxtFile(saveFile);
+              basket = Basket.loadFromJSONFile(saveFile);
           } else {
               basket = new Basket(products, prices);
           }
@@ -33,7 +33,7 @@ public class Main {
             int productCount = Integer.parseInt(parts[1]);
             basket.addToCart(productNumber, productCount);
             log.log(productNumber, productCount);
-            basket.saveTxt(saveFile);
+            basket.saveJSON(saveFile);
         }
 
         basket.printCart();

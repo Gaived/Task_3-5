@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 import java.util.*;
 
@@ -51,6 +54,8 @@ public class Basket {
         }
     }
 
+
+
     public static Basket loadFromTxtFile(File textFile) {
         Basket basket = new Basket();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(textFile))) {
@@ -67,6 +72,33 @@ public class Basket {
                     .map(Integer::parseInt)
                     .mapToInt(Integer::intValue)
                     .toArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return basket;
+    }
+
+    public void saveJSON(File file) {
+        try (PrintWriter writer = new PrintWriter(file)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(this);
+            writer.print(json);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Basket loadFromJSONFile(File file) {
+        Basket basket = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            StringBuilder builder = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null){
+                builder.append(line);
+            }
+            Gson gson = new Gson();
+            basket = gson.fromJson(builder.toString(), Basket.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
